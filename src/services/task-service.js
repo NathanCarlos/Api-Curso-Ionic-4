@@ -39,9 +39,9 @@ class TaskService {
   static async countTasksAll (userId) {
     try {
       let calcDate = new Date()
-      calcDate.setHours(calcDate.getHours() - 2)
+      // calcDate.setHours(calcDate.getHours() - 2)
       let result = await Task.count({
-        where: { userId, dataInicio: { [Op.gte]: calcDate } }
+        where: { userId: userId, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } } }
       })
       return result
     } catch (err) {
@@ -54,9 +54,10 @@ class TaskService {
   static async findAll (idUser) {
     try {
       let calcDate = new Date()
-      calcDate.setHours(calcDate.getHours() - 2)
+      // calcDate.setHours(calcDate.getHours() - 2)
       let result = await Task.findAll({
-        where: { userId: idUser, dataInicio: { [Op.gte]: calcDate } }
+        where: { userId: idUser, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } } },
+        order: [['dataInicio', 'ASC']]
       })
       return result
     } catch (err) {
@@ -70,8 +71,8 @@ class TaskService {
     try {
       let calcDate = new Date()
       let newCalcDate = new Date()
-      newCalcDate.setHours(newCalcDate.getHours() - 2)
-      calcDate.setHours(21)
+      // newCalcDate.setHours(newCalcDate.getHours() - 2)
+      calcDate.setHours(23)
       calcDate.setMinutes(59)
       let result = await Task.findAll({
         where: { userId: idUser, dataInicio: { [Op.gte]: newCalcDate, [Op.lte]: calcDate } }
@@ -87,7 +88,7 @@ class TaskService {
   static async findByIdToday (id, userId) {
     try {
       let calcDate = new Date()
-      calcDate.setHours(21)
+      calcDate.setHours(23)
       calcDate.setMinutes(59)
       let result = await Task.findAll({
         where: { id, userId, dataInicio: { [Op.lte]: calcDate } }
@@ -104,8 +105,8 @@ class TaskService {
     try {
       let calcDate = new Date()
       let newCalcDate = new Date()
-      newCalcDate.setHours(newCalcDate.getHours() - 2)
-      calcDate.setHours(21)
+      // newCalcDate.setHours(newCalcDate.getHours() - 2)
+      calcDate.setHours(23)
       calcDate.setMinutes(59)
       let result = await Task.count({
         where: { userId, dataInicio: { [Op.gte]: newCalcDate, [Op.lte]: calcDate } }
