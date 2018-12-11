@@ -1,0 +1,31 @@
+{
+  "name": "ongest-api",
+  "version": "1.0.0",
+  "description": "Api de integração plataforma e aplicativo mobile.",
+  "main": "src/server.js.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startPm2": "pm2 start src/server.js --name ongest-api -i max",
+    "start": "node src/server.js",
+    "prepare": "node docs/prepare-swagger-ui.js"
+  },
+  "keywords": [],
+  "author": "Nathan Carlos <nathan324116@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "fastify": "^1.13.1",
+    "fastify-cors": "^0.2.0",
+    "fastify-jwt": "^0.7.0",
+    "fastify-multipart": "^0.5.1",
+    "fastify-swagger": "^0.15.3",
+    "fs-extra": "^7.0.1",
+    "jsonwebtoken": "^8.3.0",
+    "moment": "^2.22.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "sequelize": "^4.41.2",
+    "sqlite3": "^4.0.4",
+    "swagger-ui-dist": "^3.20.1"
+  }
+}
