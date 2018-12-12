@@ -47,6 +47,21 @@ async function routes (fastify, options) {
       reply.code(errorCode).send(response)
     }
   })
+  fastify.get('/task/findAllDone', { beforeHandler: [fastify.authenticate], schema: findTask }, async (request, reply) => {
+    try {
+      response = await TaskService.findAllDone(request.user.id)
+      reply.status(200).send(response)
+    } catch (err) {
+      response = {
+        'error': 'Uncaught server error: ' + JSON.stringify(err)
+      }
+      let errorCode = 500
+      if (err.code != null) {
+        errorCode = err.code
+      }
+      reply.code(errorCode).send(response)
+    }
+  })
   fastify.get('/task/findCountAll', { beforeHandler: [fastify.authenticate], schema: findTask }, async (request, reply) => {
     try {
       response = await TaskService.countTasksAll(request.user.id)
@@ -94,7 +109,7 @@ async function routes (fastify, options) {
   })
   fastify.put('/task/update', { beforeHandler: [fastify.authenticate], schema: updateTask }, async (request, reply) => {
     try {
-      response = await TaskService.update(request.body.id, request.body.title, request.body.description, request.body.dataInicio, request.body.dataFim, request.user.id)
+      response = await TaskService.update(request.body.id, request.body.title, request.body.description, request.body.dataInicio, request.body.dataFim, request.user.id, request.body.done)
       reply.status(201).send(response)
     } catch (err) {
       response = {

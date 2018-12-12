@@ -19,14 +19,15 @@ class TaskService {
       throw error
     }
   }
-  static async update (id, title, description, dataInicio, dataFim, userId) {
+  static async update (id, title, description, dataInicio, dataFim, userId, done) {
     try {
       let result = await Task.update({
         title,
         description,
         dataInicio,
         dataFim,
-        userId
+        userId,
+        done
       }, { where: { id } })
       return result
     } catch (err) {
@@ -56,11 +57,29 @@ class TaskService {
       let calcDate = new Date()
       calcDate.setHours(calcDate.getHours() - 2)
       let result = await Task.findAll({
-        where: { userId: idUser, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } } },
+        where: { userId: idUser, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } }, done: false },
         order: [['dataInicio', 'ASC']]
       })
       return result
     } catch (err) {
+      console.log(err)
+      let msg = 'Ocorreu um erro ao processar a requisição.'
+      const error = new Error(msg)
+      error.code = 500
+      throw error
+    }
+  }
+  static async findAllDone (idUser) {
+    try {
+      let calcDate = new Date()
+      calcDate.setHours(calcDate.getHours() - 2)
+      let result = await Task.findAll({
+        where: { userId: idUser, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } }, done: true },
+        order: [['dataInicio', 'ASC']]
+      })
+      return result
+    } catch (err) {
+      console.log(err)
       let msg = 'Ocorreu um erro ao processar a requisição.'
       const error = new Error(msg)
       error.code = 500
@@ -71,11 +90,15 @@ class TaskService {
     try {
       let calcDate = new Date()
       let newCalcDate = new Date()
+      let calcStartDate = new Date()
       newCalcDate.setHours(newCalcDate.getHours() - 2)
       calcDate.setHours(23)
       calcDate.setMinutes(59)
+      calcStartDate.setHours(0)
+      calcStartDate.setMinutes(1)
       let result = await Task.findAll({
-        where: { userId: idUser, dataInicio: { [Op.gte]: newCalcDate, [Op.lte]: calcDate } }
+        where: { [Op.or]: [ { [Op.and]: { userId: idUser, [Op.and]: { dataInicio: { [Op.gte]: calcStartDate }, dataFim: { [Op.lte]: calcDate } } } }, { [Op.and]: { userId: idUser, [Op.and]: { dataInicio: { [Op.lte]: calcDate }, dataFim: { [Op.gte]: calcDate } } } } ] },
+        order: [['dataInicio', 'ASC']]
       })
       return result
     } catch (err) {
@@ -105,11 +128,14 @@ class TaskService {
     try {
       let calcDate = new Date()
       let newCalcDate = new Date()
+      let calcStartDate = new Date()
       newCalcDate.setHours(newCalcDate.getHours() - 2)
       calcDate.setHours(23)
       calcDate.setMinutes(59)
+      calcStartDate.setHours(0)
+      calcStartDate.setMinutes(1)
       let result = await Task.count({
-        where: { userId, dataInicio: { [Op.gte]: newCalcDate, [Op.lte]: calcDate } }
+        where: { [Op.or]: [ { [Op.and]: { userId: userId, [Op.and]: { dataInicio: { [Op.gte]: calcStartDate }, dataFim: { [Op.lte]: calcDate } } } }, { [Op.and]: { userId: userId, [Op.and]: { dataInicio: { [Op.lte]: calcDate }, dataFim: { [Op.gte]: calcDate } } } } ] }
       })
       return result
     } catch (err) {
