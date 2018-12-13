@@ -42,7 +42,7 @@ class TaskService {
       let calcDate = new Date()
       calcDate.setHours(calcDate.getHours() - 2)
       let result = await Task.count({
-        where: { userId: userId, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } } }
+        where: { userId: userId }
       })
       return result
     } catch (err) {
@@ -57,7 +57,7 @@ class TaskService {
       let calcDate = new Date()
       calcDate.setHours(calcDate.getHours() - 2)
       let result = await Task.findAll({
-        where: { userId: idUser, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } }, done: false },
+        where: { userId: idUser, done: false },
         order: [['dataInicio', 'ASC']]
       })
       return result
@@ -74,7 +74,7 @@ class TaskService {
       let calcDate = new Date()
       calcDate.setHours(calcDate.getHours() - 2)
       let result = await Task.findAll({
-        where: { userId: idUser, [Op.or]: { dataInicio: { [Op.gte]: calcDate }, dataFim: { [Op.gte]: calcDate } }, done: true },
+        where: { userId: idUser, done: true },
         order: [['dataInicio', 'ASC']]
       })
       return result
