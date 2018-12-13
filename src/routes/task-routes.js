@@ -94,7 +94,7 @@ async function routes (fastify, options) {
   })
   fastify.post('/task/create', { beforeHandler: [fastify.authenticate], schema: createTask }, async (request, reply) => {
     try {
-      response = await TaskService.create(request.body.title, request.body.description, request.body.dataInicio, request.body.dataFim, request.user.id)
+      response = await TaskService.create(request.body.title, request.body.description, request.body.dataInicio, request.body.dataFim, request.user.id, request.body.aviso)
       reply.status(201).send(response)
     } catch (err) {
       response = {
@@ -109,7 +109,7 @@ async function routes (fastify, options) {
   })
   fastify.put('/task/update', { beforeHandler: [fastify.authenticate], schema: updateTask }, async (request, reply) => {
     try {
-      response = await TaskService.update(request.body.id, request.body.title, request.body.description, request.body.dataInicio, request.body.dataFim, request.user.id, request.body.done)
+      response = await TaskService.update(request.body.id, request.body.title, request.body.description, request.body.dataInicio, request.body.dataFim, request.user.id, request.body.done, request.body.aviso)
       reply.status(201).send(response)
     } catch (err) {
       response = {

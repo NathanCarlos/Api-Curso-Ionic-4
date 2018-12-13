@@ -8,7 +8,8 @@ const Task = sqlize.define('task', {
   dataInicio: { type: Sequelize.DATE, allowNull: false, validate: { isDate: true } },
   dataFim: { type: Sequelize.DATE, allowNull: false, validate: { isDate: true } },
   userId: { type: Sequelize.INTEGER, allowNull: false, validate: { isInt: true } },
-  done: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false }
+  done: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
+  aviso: { type: Sequelize.STRING, allowNull: false }
 })
 Task.belongsTo(User)
 User.hasMany(Task)

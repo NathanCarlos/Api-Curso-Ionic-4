@@ -2,14 +2,15 @@ const { Task } = require('../models/index')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 class TaskService {
-  static async create (title, description, dataInicio, dataFim, userId) {
+  static async create (title, description, dataInicio, dataFim, userId, aviso) {
     try {
       let result = await Task.create({
         title,
         description,
         dataInicio,
         dataFim,
-        userId
+        userId,
+        aviso
       })
       return result
     } catch (err) {
@@ -19,7 +20,7 @@ class TaskService {
       throw error
     }
   }
-  static async update (id, title, description, dataInicio, dataFim, userId, done) {
+  static async update (id, title, description, dataInicio, dataFim, userId, done, aviso) {
     try {
       let result = await Task.update({
         title,
@@ -27,7 +28,8 @@ class TaskService {
         dataInicio,
         dataFim,
         userId,
-        done
+        done,
+        aviso
       }, { where: { id } })
       return result
     } catch (err) {
