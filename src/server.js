@@ -1,7 +1,7 @@
 require('dotenv').config()
 const fastify = require('fastify')({ logger: true })
 const routes = require('./routes/index')
-const port = 8081
+const port = 3000
 
 fastify.register(require('fastify-cors'))
 fastify.register(require('fastify-multipart'))
@@ -55,8 +55,8 @@ const start = async () => {
       fastify.swagger()
     })
     await fastify.listen(port, '0.0.0.0')
-    fastify.log.info(`server listening on ${fastify.server.address().port}`)
-    console.log(`server listening on ${fastify.server.address().port}`)
+    fastify.log.info(`Api rodando em: ${fastify.server.address().port}`)
+    console.log(`Api rodando em: ${fastify.server.address().port}`)
   } catch (err) {
     fastify.log.error(err)
     console.error(err)
